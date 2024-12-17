@@ -22,9 +22,15 @@ function Register() {
     };
   }, []);
 
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  const passwordRegex = /^(?=.*[A-Z]).{8,}$/;
+  if (!passwordRegex.test(password)) {
+    alert("Password must be at least 8 characters long and contain at least one uppercase letter.");
+    return;
+  }
     const hashedPassword = sha256(password).toString();
     const data = {
       Username: username,
@@ -42,7 +48,7 @@ function Register() {
       window.location.reload();
     }).catch((error) => {
       console.log('Error:', error);
-      alert('Username exists.');
+      alert(error);
     });
   };
 
