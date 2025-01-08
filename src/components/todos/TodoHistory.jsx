@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Cookie from "js-cookie";
 import env from "../../env.json";
-import './todoList.css';
+import './todoHistory.css';
 import TaskModal from '../taskModal'; // Import the Modal component
 
-function TodoList() {
+function TodoHistory() {
   const [tasks, setTasks] = useState([]);
     const [showModal, setShowModal] = useState(false);
 
@@ -41,7 +41,7 @@ function TodoList() {
 
   useEffect(() => {
     const user = JSON.parse(Cookie.get("signed_in_user"));
-    axios.get(`${env.api}/task/user/${user._id}/tasks`)
+    axios.get(`${env.api}/task/user/${user._id}/tasks/all`)
       .then((response) => {
         setTasks(response.data.tasks);
       })
@@ -86,7 +86,7 @@ const handleInputChange = (e) => {
     }
 
     const user = JSON.parse(Cookie.get("signed_in_user"));
-    axios.post(`${env.api}/task/user/${user._id}/tasks`, newTask, {
+    axios.post(`${env.api}/task/user/${user._id}/tasks/all`, newTask, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -174,5 +174,5 @@ const handleInputChange = (e) => {
   );
 }
 
-export default TodoList;
+export default TodoHistory;
 

@@ -21,11 +21,11 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: black;
 }
 
 .App-link {
-  color: #61dafb;
+  color: #4f6368;
 }
 
 @keyframes App-logo-spin {
@@ -38,12 +38,36 @@
 }
 
 #root {
-  background-image: url('src/bg2.jpg');
+
   background-position: center;
-  background-repeat: repeat; /* Changed from 'repeat' to 'repeat' */
+  background-repeat: no-repeat; 
   z-index: -1;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
 }
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f8d7da;
+  color: #721c24;
+  text-align: center;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.error-text {
+  font-size: 48px;
+  font-weight: bold;
+}
+
+.error-description {
+  font-size: 18px;
+  margin-top: 10px;
+}
+

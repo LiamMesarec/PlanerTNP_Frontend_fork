@@ -1,0 +1,91 @@
+/* Global styles for a modern look */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    color: #333;
+  }
+  
+  /* Container for the settings */
+  .settings-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #2b3a48;
+    border-radius: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Header styling */
+  .settings-container h1 {
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  /* Font size description */
+  .settings-container p {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    text-align: center;
+    color: white;
+  }
+  
+  /* Label styling */
+  .settings-container label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color:white;
+  }
+  
+  /* Dropdown styling */
+  .settings-container select {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    color: #333;
+    transition: border-color 0.3s ease;
+  }
+  
+  /* Hover effect for dropdown */
+  .settings-container select:hover {
+    border-color: #2c3e50;
+  }
+  
+  /* Focus effect for dropdown */
+  .settings-container select:focus {
+    outline: none;
+    border-color: #2980b9;
+    box-shadow: 0 0 4px rgba(41, 128, 185, 0.5);
+  }
+  
+  .walking-figure-container {
+    position: relative;
+    height: 100px;
+    overflow: hidden;
+    margin-top: 30px;
+  }
+  
+  .walking-figure {
+    position: absolute;
+    width: 50px;
+    height: 100px;
+    background: url('https://via.placeholder.com/50x100') no-repeat center/contain;
+    animation: walk linear infinite;
+  }
+  
+  @keyframes walk {
+    from {
+      transform: translateX(-60px);
+    }
+    to {
+      transform: translateX(100vw);
+    }
+  }
+  

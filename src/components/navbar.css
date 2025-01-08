@@ -1,16 +1,19 @@
 /* navbar.css */
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap');
 
 .navbar {
     position: sticky;
     top: 0;
-    background-color: #3498db;
-    padding: 10px 20px;
+    background-color: #354b5e;
+    padding: 15px 20px;
     z-index: 1000;
     display: flex;
-    justify-content: flex-end; /* Changed to align items to the right */
-    font-family: 'Poppins', sans-serif; }
+    justify-content: center;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-bottom: 2px solid #2b3a48;
+}
 
 .navbar-list {
     list-style: none;
@@ -20,30 +23,35 @@
 }
 
 .navbar-item {
-    margin: 0 15px;
+    margin: 0 20px;
 }
 
 .navbar-item a {
     text-decoration: none;
-    font-weight: bold;
-    color: #0d1b35;
-    font-size: 18px;
-    transition: color 0.3s;
+    font-weight: 600;
+    color: #f0f4f8;
+    font-size: 20px;
+    transition: color 0.3s ease, transform 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .navbar-item a:hover,
 .navbar-item.active a {
-    color: #f3f7ff;
+    color: #8fc3e5;
+    transform: scale(1.1);
 }
 
 @media (max-width: 830px) {
     .navbar {
         flex-direction: column;
         align-items: center;
+        padding: 20px;
     }
 
     .navbar-list {
         flex-direction: column;
+        align-items: center;
     }
 
     .navbar-item {

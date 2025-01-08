@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import '../App.css';
 import './navbar.css';
+import React from "react";
 
 function Navbar() {
     const location = useLocation();
@@ -32,8 +33,8 @@ function Navbar() {
                         <li className={`navbar-item ${location.pathname === '/todos' ? 'active' : ''}`}>
                             <Link to="/todos">Todos</Link>
                         </li>
-                        <li className={`navbar-item ${location.pathname === '/todo-histroy' ? 'active' : ''}`}>
-                            <Link to="/todo-history">Todos history</Link>
+                        <li className={`navbar-item ${location.pathname === '/todos-history' ? 'active' : ''}`}>
+                            <Link to="/todos-history">Todos history</Link>
                         </li>
                         <li className={`navbar-item ${location.pathname === '/profile' ? 'active' : ''}`}>
                             <Link to="/profile">Profile</Link>
@@ -50,9 +51,11 @@ function Navbar() {
                         <li className={`navbar-item ${location.pathname === '/register' ? 'active' : ''}`}>
                             <Link to="/register">Register</Link>
                         </li>
+                        <li className={`navbar-item ${location.pathname === '/settings' ? 'active' : ''}`}>
+                            <Link to="/settings">Settings</Link> 
+                        </li>
                     </>
-                )
-                }
+                )}
             </ul>
         </nav>
     );

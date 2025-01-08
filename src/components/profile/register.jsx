@@ -1,75 +1,71 @@
-import axios from 'axios';
-import sha256 from 'crypto-js/sha256';
-import Cookie from 'js-cookie';
-import React, { useEffect, useState } from 'react';
-import { GoogleLogin } from 'react-google-login';
-import { useNavigate } from 'react-router-dom';
-import env from '../../env.json';
-import './login.css';
+import axios from "axios";
+import sha256 from "crypto-js/sha256";
+import Cookie from "js-cookie";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+//import { GoogleLogin } from "react-google-login";
+import env from "../../env.json";
+import "./login.css";
 
 function Register() {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Disable scrolling when on the register page
-    document.body.classList.add('no-scroll');
-
+    document.body.classList.add("no-scroll");
     return () => {
-      document.body.classList.remove('no-scroll');
+      document.body.classList.remove("no-scroll");
     };
   }, []);
 
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-  const passwordRegex = /^(?=.*[A-Z]).{8,}$/;
-  if (!passwordRegex.test(password)) {
-    alert("Password must be at least 8 characters long and contain at least one uppercase letter.");
-    return;
-  }
-    const hashedPassword = sha256(password).toString();
-    const data = {
-      Username: username,
-      Email: email,
-      Password: hashedPassword
-    };
+    if (!username || !email || !password) {
+      alert("All fields are required.");
+      return;
+    }
 
-    axios.post(`${env.api}/auth/register`, data, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then((response) => {
-      Cookie.set("signed_in_user", JSON.stringify(response.data));
-      navigate("/");
-      window.location.reload();
-    }).catch((error) => {
-      console.log('Error:', error);
-      alert(error);
-    });
-  };
-
-  const handleGoogleLogin = async (googleData) => {
-    const { tokenObj } = googleData;
     try {
-      const response = await axios.post(`${env.api}/users/googleRegister`, {
-        token: tokenObj.id_token
-      }, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
+      const hashedPassword = sha256(password).toString();
+      const data = { username: username, email: email, password: hashedPassword };
+      const response = await axios.post(`${env.api}/auth/register`, data, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
       });
-      if (response.data && response.status === 200) {
-        Cookie.set("signed_in_user", response.data);
+
+      if (response.data.error) {
+        alert(response.data.error);
+      } else {
+        Cookie.set("signed_in_user", JSON.stringify(response.data));
         navigate("/");
         window.location.reload();
       }
     } catch (error) {
-      console.log('Error:', error);
+      console.error("Registration failed:", error);
+      alert(error.response?.data?.error || "Registration failed.");
     }
+  };
+
+  const handleGoogleLoginSuccess = async (response) => {
+    try {
+      const token = response.tokenId;
+      const res = await axios.post(`${env.api}/auth/google`, { token });
+      if (res.data) {
+        Cookie.set("signed_in_user", JSON.stringify(res.data));
+        navigate("/");
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("Google registration failed:", error);
+      alert("Google registration failed.");
+    }
+  };
+
+  const handleGoogleLoginFailure = () => {
+    console.error("Google login failed.");
+    alert("Google login failed.");
   };
 
   return (
@@ -107,18 +103,11 @@ function Register() {
               required
             />
           </div>
-          <button type="submit" className="login-button">Register</button>
+          <button type="submit" className="login-button">
+            Register
+          </button>
         </form>
-
-        <div className="separator">Or register with <strong>Google</strong></div>
-        <GoogleLogin
-          clientId="YOUR_GOOGLE_CLIENT_ID"
-          buttonText="Register with Google"
-          onSuccess={handleGoogleLogin}
-          onFailure={handleGoogleLogin}
-          cookiePolicy={'single_host_origin'}
-        />
-
+        <div className="separator">Or register with Google</div>
         <div className="terms">
           By clicking Register, you agree to our <strong>Terms of Service</strong> and <strong>Privacy Policy</strong>.
         </div>
