@@ -3,27 +3,27 @@ import axios from 'axios';
 import Cookie from "js-cookie";
 import env from "../../env.json";
 import './todoHistory.css';
-import TaskModal from '../taskModal'; // Import the Modal component
+import TaskModal from '../taskModal';
 
 function TodoHistory() {
   const [tasks, setTasks] = useState([]);
-    const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [sortBy, setSortBy] = useState('endDate'); // Default sort by end date
+  const [searchQuery, setSearchQuery] = useState(''); // State for search query
 
   const currentDate = new Date();
-  const currentDateTimeString = currentDate.toISOString().slice(0, 16); // Format as YYYY-MM-DDTHH:MM
+  const currentDateTimeString = currentDate.toISOString().slice(0, 16);
 
-  // Set the end time to the next day's midnight (next 00:00)
   const midnight = new Date();
-  midnight.setHours(23, 59, 59, 999); // set to end of the current day
-  const midnightTimeString = midnight.toISOString().slice(0, 16); // Format as YYYY-MM-DDTHH:MM
-
+  midnight.setHours(23, 59, 59, 999);
+  const midnightTimeString = midnight.toISOString().slice(0, 16);
 
   const [newTask, setNewTask] = useState({
     name: '',
     urgent: false,
-    color: '#3498db', // Default color
-    startDateTime: currentDateTimeString, // Default to current time
-    endDateTime: midnightTimeString,   // Default to midnight
+    color: '#3498db',
+    startDateTime: currentDateTimeString,
+    endDateTime: midnightTimeString,
   });
 
   const filters = [
@@ -60,18 +60,18 @@ function TodoHistory() {
       name: '',
       urgent: false,
       color: '#3498db',
-      startDateTime: currentDateTimeString, // Reset to current time
-      endDateTime: midnightTimeString,   // Reset to midnight
+      startDateTime: currentDateTimeString,
+      endDateTime: midnightTimeString,
     });
   };
 
-const handleInputChange = (e) => {
-  const { name, value, type, checked } = e.target;
-  setNewTask((prevTask) => ({
-    ...prevTask,
-    [name]: type === 'checkbox' ? checked : value,
-  }));
-};
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setNewTask((prevTask) => ({
+      ...prevTask,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -111,9 +111,45 @@ const handleInputChange = (e) => {
       .catch((error) => console.log(error));
   };
 
+  // Toggle sort order
+  const handleSortToggle = () => {
+    setSortBy(sortBy === 'endDate' ? 'activity' : 'endDate');
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
   const renderTasks = () => {
-    return tasks.map((task, index) => (
-      <li key={index} className="task-item">
+    let sortedTasks = [...tasks];
+
+    // Filter tasks based on the search query
+    if (searchQuery) {
+      sortedTasks = sortedTasks.filter((task) =>
+        task.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    if (sortBy === 'endDate') {
+      // Sort by end date (ascending)
+      sortedTasks.sort((a, b) => new Date(a.endDateTime) - new Date(b.endDateTime));
+    } else {
+      // Sort by task activity (deleted first, then active tasks)
+      sortedTasks.sort((a, b) => {
+        if (a.deleted && !b.deleted) return 1;
+        if (!a.deleted && b.deleted) return -1;
+        return 0;
+      });
+    }
+
+    return sortedTasks.map((task, index) => (
+      <li
+        key={index}
+        className="task-item"
+        style={{
+          backgroundColor: task.deleted ? '#ffe6e6' : new Date(task.endDateTime) < new Date() ? '#d3d3d3' : '#c1ffcd',
+        }}
+      >
         <div className="task-content">
           <div
             className="color-circle"
@@ -126,20 +162,34 @@ const handleInputChange = (e) => {
             {new Date(task.startDateTime).toLocaleString('en-GB')} -{' '}
             {new Date(task.endDateTime).toLocaleString('en-GB')}
           </span>
-          <button
-            className="delete-button"
-            style={{marginLeft: "15px", backgroundColor: "cornflowerblue"}}
-            onClick={() => handleEditTask(task)}
-          >
-            Edit
-          </button>
-          <button
-            className="delete-button"
-            style={{marginLeft: "15px"}}
-            onClick={() => handleDeleteTask(task._id)}
-          >
-            Delete
-          </button>
+          <div className="task-buttons">
+            {task.deleted ? (
+              <button
+                className="delete-button"
+                style={{ marginLeft: '15px', backgroundColor: 'orangered' }}
+                onClick={() => handleEditTask(task)}
+              >
+                Restore
+              </button>
+            ) : (
+              <>
+                <button
+                  className="delete-button"
+                  style={{ marginLeft: '15px', backgroundColor: 'cornflowerblue' }}
+                  onClick={() => handleEditTask(task)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="delete-button"
+                  style={{ marginLeft: '15px' }}
+                  onClick={() => handleDeleteTask(task._id)}
+                >
+                  Delete
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </li>
     ));
@@ -151,6 +201,16 @@ const handleInputChange = (e) => {
         <h1>My Todos</h1>
         <div className="todo-list">
           <div className="todo-header">
+            <button className="sort-button" onClick={handleSortToggle}>
+              Sort by {sortBy === 'endDate' ? 'End Date' : 'Activity'}
+            </button>
+            <input
+              type="text"
+              className="search-bar"
+              placeholder="Search tasks..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
             <button className="add-task-button" onClick={handleAddTask}>
               +
             </button>
