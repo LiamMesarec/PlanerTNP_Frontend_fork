@@ -7,7 +7,7 @@ import TaskModal from '../taskModal'; // Import the Modal component
 
 function TodoList() {
   const [tasks, setTasks] = useState([]);
-    const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const currentDate = new Date();
   const currentDateTimeString = currentDate.toISOString().slice(0, 16); // Format as YYYY-MM-DDTHH:MM
@@ -65,13 +65,13 @@ function TodoList() {
     });
   };
 
-const handleInputChange = (e) => {
-  const { name, value, type, checked } = e.target;
-  setNewTask((prevTask) => ({
-    ...prevTask,
-    [name]: type === 'checkbox' ? checked : value,
-  }));
-};
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setNewTask((prevTask) => ({
+      ...prevTask,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -112,7 +112,10 @@ const handleInputChange = (e) => {
   };
 
   const renderTasks = () => {
-    return tasks.map((task, index) => (
+    // Filter tasks that are not expired (i.e., where endDateTime is not before the current date)
+    const activeTasks = tasks.filter(task => new Date(task.endDateTime) >= currentDate);
+
+    return activeTasks.map((task, index) => (
       <li key={index} className="task-item">
         <div className="task-content">
           <div
@@ -128,14 +131,14 @@ const handleInputChange = (e) => {
           </span>
           <button
             className="delete-button"
-            style={{marginLeft: "15px", backgroundColor: "cornflowerblue"}}
+            style={{ marginLeft: "15px", backgroundColor: "cornflowerblue" }}
             onClick={() => handleEditTask(task)}
           >
             Edit
           </button>
           <button
             className="delete-button"
-            style={{marginLeft: "15px"}}
+            style={{ marginLeft: "15px" }}
             onClick={() => handleDeleteTask(task._id)}
           >
             Delete
