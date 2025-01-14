@@ -1,0 +1,81 @@
+/* Updated login.css for center-aligned content with blue background */
+
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.login-background {
+    background-color: white;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container {
+    padding: 30px;
+    background-color: #2b3a48;
+    color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    text-align: center;
+}
+
+.login-container h1 {
+    color: white;
+    margin-bottom: 20px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group label{
+    margin-bottom: 15px;
+    text-align: left;
+    color: white;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    color:  #2b3a48;
+}
+
+.login-button, .google-button {
+    padding: 12px 20px;
+    margin: 10px 0;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-button:hover, .google-button:hover {
+    background-color: #2980b9;
+}
+
+.google-button {
+    background-color: #db4437;
+}
+
+.separator {
+    margin: 20px 0;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.terms {
+    font-size: 0.8em;
+    color: #666;
+}
